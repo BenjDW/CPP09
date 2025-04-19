@@ -6,7 +6,7 @@
 /*   By: bde-wits <bde-wits@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 12:00:55 by bde-wits          #+#    #+#             */
-/*   Updated: 2025/04/19 05:58:28 by bde-wits         ###   ########.fr       */
+/*   Updated: 2025/04/19 07:22:39 by bde-wits         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,9 @@ class RPN
 	public:
 		RPN();
 		~RPN();
-		// std::string 	str;
 		std::stack<int> stack;
-		int				result;
 		bool			is_signe(char c);
-		void			apply_op(std::string str, std::string::iterator it_str);
+		void			apply_op(char op);
 };
 
 //verif si y a un signe et donc applique le comportement associe
@@ -53,27 +51,60 @@ bool RPN::is_signe(char c)
 		return (true);
 }
 
-void	RPN::apply_op(std::string str, std::string::iterator it_str)
+// void	RPN::apply_op(std::string str, std::string::iterator it_str)
+// {
+// 	int one;
+// 	int	two;
+// 	int result;
+
+// 	if (stack.size() < 2)
+// 		std::cerr << "error need 2 number with one opérator" << std::endl, std::exit(1);
+// 	else
+// 	{
+// 		one = stack.top();
+// 		stack.pop();
+// 		two = stack.top();
+// 		stack.pop();
+// 		if (*it_str == '+')
+// 			result = one + two;
+// 		else if (*it_str == '-')
+// 			result = one - two;
+// 		else if (*it_str == '/')
+// 			result = one / two;
+// 		else if (*it_str == '*')
+// 			result = one * two;
+// 	}
+// 	stack.push(result);
+// }
+
+void	RPN::apply_op(char op)
 {
 	int one;
 	int	two;
 	int result;
 
-	if (stack.size() != 2)
-		std::cerr << "error need 2 number with one opérator" << std::endl, exit(1);
-	else
+	if (stack.size() < 2)
+		std::cerr << "error need 2 number with one opérator" << std::endl, std::exit(1);
+	result = 0;
+	one = stack.top();
+	stack.pop();
+	two = stack.top();
+	stack.pop();
+
+	if (op == '+')
+		result = two + one;
+	else if (op == '-')
+		result = two - one;
+	else if (op == '*')
+		result = two * one;
+	else if (op == '/')
 	{
-		one = stack.top();
-		stack.pop();
-		two = stack.top();
-		if (*it_str == '+')
-			result = one + two;
-		else if (*it_str == '-')
-			result = one - two;
-		else if (*it_str == '/')
-			result = one / two;
-		else if (*it_str == '*')
-			result = one * two;
+		if (one == 0)
+		{
+			std::cerr << "Error: division by zero" << std::endl;
+			std::exit(1);
+		}
+		result = two / one;
 	}
 	stack.push(result);
 }
