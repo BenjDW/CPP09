@@ -6,7 +6,7 @@
 /*   By: bde-wits <bde-wits@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 12:00:47 by bde-wits          #+#    #+#             */
-/*   Updated: 2025/04/20 05:42:26 by bde-wits         ###   ########.fr       */
+/*   Updated: 2025/04/20 05:49:04 by bde-wits         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int main(int argc, char **argv)
 
 	if (argc != 2)
 	{
-		std::cerr << "./RPN int int operator" << std::endl;
+		std::cerr << "./RPN \"int int operator\"" << std::endl;
 		return (1);
 	}
 	else
