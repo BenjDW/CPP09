@@ -6,7 +6,7 @@
 /*   By: bde-wits <bde-wits@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 06:25:33 by bde-wits          #+#    #+#             */
-/*   Updated: 2025/04/30 08:02:40 by bde-wits         ###   ########.fr       */
+/*   Updated: 2025/04/30 10:23:58 by bde-wits         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ class PmergeMe
 		~PmergeMe();
 		std::vector<int>	vec;
 		std::deque<int>		deq;
-		void				pair(std::vector<std::pair<int, int>> pairs);
+		void				pair(std::vector<std::pair<int, int> > &pairs);
 		int					first_verif(char **argv);
 
 		void				algo_vec();
@@ -65,11 +65,11 @@ class PmergeMe
 
 int	PmergeMe::first_verif(char **argv)
 {
-	int i = 1;
+	int i = 0;
 	int value;
 	std::string arg(argv[i]);
 
-	while (argv[i] != NULL)
+	while (argv[++i] != NULL)
 	{
 		arg = argv[i];
 		for (size_t j = 0; j < arg.length(); j++)
@@ -89,17 +89,12 @@ int	PmergeMe::first_verif(char **argv)
 	return (0);
 }
 
-void	PmergeMe::algo_vec()
-{
-	
-}
-
 void	PmergeMe::algo_deque()
 {
 
 }
 
-void	PmergeMe::pair(std::vector<std::pair<int, int>> pairs)
+void	PmergeMe::pair(std::vector<std::pair<int, int> > &pairs)
 {
 	for (size_t i = 0; i + 1 < vec.size(); i += 2)
 	{
@@ -184,6 +179,7 @@ void	PmergeMe::algo_vec()
 	// 	}
 	// 	vec_tri.insert(vec_tri.begin() + left, value);
 	// }
+	
 	for (size_t i = 0; i < pairs.size(); ++i)
 	{
 		if (pairs[i].second == -1)
@@ -202,6 +198,11 @@ void	PmergeMe::algo_vec()
 				right = mid;
 		}
 		vec_tri.insert(vec_tri.begin() + left, value);
+	}
+	std::cout << "vec trié :";
+	for (size_t i = 0; i < vec_tri.size(); i++)
+	{
+		std::cout << vec_tri[i] << " ";
 	}
 }
 
