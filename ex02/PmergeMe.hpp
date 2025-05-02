@@ -6,7 +6,7 @@
 /*   By: bde-wits <bde-wits@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 06:25:33 by bde-wits          #+#    #+#             */
-/*   Updated: 2025/05/02 07:02:57 by bde-wits         ###   ########.fr       */
+/*   Updated: 2025/05/02 07:48:09 by bde-wits         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,17 @@ class PmergeMe
 		std::vector<int>	vec;
 		std::deque<int>		deq;
 		void				pair(std::vector<std::pair<int, int> > &pairs);
+		void				pair_deq(std::deque<std::pair<int, int> > &pairs);
 		int					first_verif(char **argv);
 
 		void				algo_vec();
+		std::vector<int> 	vec_tri;
+		clock_t 			start_vec;
+		clock_t 			end_vec;
 		void				algo_deque();
+		std::deque<int> 	deq_tri;
+		clock_t 			start_deq;
+		clock_t 			end_deq;
 };
 
 int	PmergeMe::first_verif(char **argv)
@@ -64,11 +71,6 @@ int	PmergeMe::first_verif(char **argv)
 	return (0);
 }
 
-void	PmergeMe::algo_deque()
-{
-
-}
-
 void	PmergeMe::pair(std::vector<std::pair<int, int> > &pairs)
 {
 	for (size_t i = 0; i + 1 < vec.size(); i += 2)
@@ -84,22 +86,13 @@ void	PmergeMe::pair(std::vector<std::pair<int, int> > &pairs)
 		pairs.push_back(std::make_pair(vec[vec.size() - 1], -1));	
 }
 
-//exec part
 void	PmergeMe::algo_vec()
 {
-	clock_t start = clock();
-	clock_t end;
+	start_vec = clock();
 	std::vector<std::pair<int, int>> pairs;
-	std::vector<int> vec_tri;
 	int temp;
 	int value;
 
-	std::cout << "before :";
-	for (size_t i = 0; i < vec.size(); i++)
-	{
-		std::cout << vec[i] << " ";
-	}
-	std::cout << std::endl;
 	pair(pairs);
 
 	for (size_t i = 0; i < pairs.size(); ++i)
@@ -135,14 +128,67 @@ void	PmergeMe::algo_vec()
 		}
 		vec_tri.insert(vec_tri.begin() + left, value);
 	}
-	end = clock();
-	std::cout << "after :";
-	for (size_t i = 0; i < vec_tri.size(); i++)
+	end_vec = clock();
+}
+
+void	PmergeMe::pair_deq(std::deque<std::pair<int, int> > &pairs)
+{
+	for (size_t i = 0; i + 1 < vec.size(); i += 2)
 	{
-		std::cout << vec_tri[i] << " ";
+		int a = vec[i];
+		int b = vec[i + 1];
+		if (a < b)
+			pairs.push_back(std::make_pair(b, a));
+		else
+			pairs.push_back(std::make_pair(a, b));
 	}
-	std::cout << std::endl;
-	std::cout << "Time to process a range of " << vec_tri.size() << " elements with std::vector : " << static_cast<int>(end - start) * 1000000 / CLOCKS_PER_SEC << " us" << std::endl;
+	if (vec.size() % 2 != 0)
+		pairs.push_back(std::make_pair(vec[vec.size() - 1], -1));	
+}
+
+void PmergeMe::algo_deque()
+{
+	start_deq = clock();
+	std::deque<std::pair<int, int> > pairs;
+	int temp;
+	int value;
+
+	pair_deq(pairs);
+
+	for (size_t i = 0; i < pairs.size(); ++i)
+		deq_tri.push_back(pairs[i].first);
+
+	for (size_t i = 1; i < deq_tri.size(); ++i)
+	{
+		temp = deq_tri[i];
+		size_t j = i;
+		while (j > 0 && deq_tri[j - 1] > temp)
+		{
+			deq_tri[j] = deq_tri[j - 1];
+			--j;
+		}
+		deq_tri[j] = temp;
+	}
+
+	for (size_t i = 0; i < pairs.size(); ++i)
+	{
+		if (pairs[i].second == -1)
+			continue;
+		value = pairs[i].second;
+
+		size_t left = 0;
+		size_t right = deq_tri.size();
+		while (left < right)
+		{
+			size_t mid = (left + right) / 2;
+			if (deq_tri[mid] < value)
+				left = mid + 1;
+			else
+				right = mid;
+		}
+		deq_tri.insert(deq_tri.begin() + left, value);
+	}
+	end_deq = clock();
 }
 
 PmergeMe::PmergeMe()
