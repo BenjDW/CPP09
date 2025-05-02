@@ -6,7 +6,7 @@
 /*   By: bde-wits <bde-wits@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 06:25:33 by bde-wits          #+#    #+#             */
-/*   Updated: 2025/04/30 10:23:58 by bde-wits         ###   ########.fr       */
+/*   Updated: 2025/05/02 07:02:57 by bde-wits         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,31 +37,6 @@ class PmergeMe
 		void				algo_vec();
 		void				algo_deque();
 };
-
-//parsing part
-// int	PmergeMe::first_verif(char **argv)
-// {
-// 	int limit = 0;
-	
-// 	while (argv != NULL)
-// 		limit++;
-// 	for (size_t i = 1; i < limit; i++)
-// 	{
-// 		int j = 1;
-
-// 		if (!std::isdigit(std::atoi(argv[i])))
-// 			return (std::cerr << "Error : only numeric number needed" << std::endl, 1);
-// 		while (argv[j] != NULL)
-// 		{
-// 			if (j == i)
-// 				j++;
-// 			if (std::atoi(argv[i]) == std::atoi(argv[j]))
-// 				return (std::cerr << "Error : int en double detected" << std::endl, 1);
-// 		}
-// 		vec.push_back(std::atoi(argv[i]));
-// 		deq.push_back(std::atoi(argv[i]));
-// 	}
-// }
 
 int	PmergeMe::first_verif(char **argv)
 {
@@ -112,19 +87,24 @@ void	PmergeMe::pair(std::vector<std::pair<int, int> > &pairs)
 //exec part
 void	PmergeMe::algo_vec()
 {
-	// clock_t start = clock();
-
-	//créer les paires (max, min)
+	clock_t start = clock();
+	clock_t end;
 	std::vector<std::pair<int, int>> pairs;
 	std::vector<int> vec_tri;
 	int temp;
+	int value;
+
+	std::cout << "before :";
+	for (size_t i = 0; i < vec.size(); i++)
+	{
+		std::cout << vec[i] << " ";
+	}
+	std::cout << std::endl;
 	pair(pairs);
 
-	//trier les max (premiers des paires)
 	for (size_t i = 0; i < pairs.size(); ++i)
 		vec_tri.push_back(pairs[i].first);
 
-	//Insertion sort
 	for (size_t i = 1; i < vec_tri.size(); ++i)
 	{
 		temp = vec_tri[i];
@@ -137,56 +117,12 @@ void	PmergeMe::algo_vec()
 		vec_tri[j] = temp;
 	}
 
-	// Étape 3 : insertion des min dans l'ordre Jacobsthal
-	// std::vector<int> pending;
-	// for (size_t i = 0; i < pairs.size(); ++i)
-	// {
-	// 	if (pairs[i].second != -1)
-	// 		pending.push_back(pairs[i].second);
-	// }
-
-	// // Génération des indices Jacobsthal
-	// std::vector<size_t> insert_order;
-	// size_t j1 = 1, j2 = 1;
-	// while (j2 < pending.size())
-	// {
-	// 	insert_order.push_back(j2);
-	// 	size_t next = j2 + 2 * j1;
-	// 	j1 = j2;
-	// 	j2 = next;
-	// }
-	// for (size_t i = 0; i < pending.size(); ++i)
-	// {
-	// 	if (std::find(insert_order.begin(), insert_order.end(), i) == insert_order.end())
-	// 		insert_order.push_back(i);
-	// }
-
-	// Insertion avec recherche binaire
-	// for (size_t i = 0; i < insert_order.size(); ++i)
-	// {
-	// 	if (insert_order[i] >= pending.size())
-	// 		continue;
-	// 	int value = pending[insert_order[i]];
-	// 	size_t left = 0;
-	// 	size_t right = vec_tri.size();
-	// 	while (left < right)
-	// 	{
-	// 		size_t mid = (left + right) / 2;
-	// 		if (vec_tri[mid] < value)
-	// 			left = mid + 1;
-	// 		else
-	// 			right = mid;
-	// 	}
-	// 	vec_tri.insert(vec_tri.begin() + left, value);
-	// }
-	
 	for (size_t i = 0; i < pairs.size(); ++i)
 	{
 		if (pairs[i].second == -1)
 			continue;
-		int value = pairs[i].second;
+		value = pairs[i].second;
 
-		// Recherche binaire pour trouver l'emplacement d'insertion
 		size_t left = 0;
 		size_t right = vec_tri.size();
 		while (left < right)
@@ -199,11 +135,14 @@ void	PmergeMe::algo_vec()
 		}
 		vec_tri.insert(vec_tri.begin() + left, value);
 	}
-	std::cout << "vec trié :";
+	end = clock();
+	std::cout << "after :";
 	for (size_t i = 0; i < vec_tri.size(); i++)
 	{
 		std::cout << vec_tri[i] << " ";
 	}
+	std::cout << std::endl;
+	std::cout << "Time to process a range of " << vec_tri.size() << " elements with std::vector : " << static_cast<int>(end - start) * 1000000 / CLOCKS_PER_SEC << " us" << std::endl;
 }
 
 PmergeMe::PmergeMe()
