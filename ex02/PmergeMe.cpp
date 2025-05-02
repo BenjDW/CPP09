@@ -6,7 +6,7 @@
 /*   By: bde-wits <bde-wits@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 06:25:42 by bde-wits          #+#    #+#             */
-/*   Updated: 2025/05/02 08:49:16 by bde-wits         ###   ########.fr       */
+/*   Updated: 2025/05/02 09:17:24 by bde-wits         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,16 @@ int	PmergeMe::first_verif(char **argv)
 	while (argv[++i] != NULL)
 	{
 		arg = argv[i];
+		value = 0;
 		for (size_t j = 0; j < arg.length(); j++)
 		{
 			if (!std::isdigit(arg[j]))
 				return (std::cerr << "Error: only positive integers are allowed: " << arg << std::endl, 1);
 		}
-		value = std::atoi(argv[i]);
+		for (size_t j = 0; j < arg.length(); j++)
+		{
+			value = value * 10 + (arg[j] - '0');
+		}
 		for (size_t k = 0; k < vec.size(); k++)
 		{
 			if (vec[k] == value)
@@ -56,7 +60,7 @@ void	PmergeMe::pair(std::vector<std::pair<int, int> > &pairs)
 void	PmergeMe::algo_vec()
 {
 	start_vec = clock();
-	std::vector<std::pair<int, int>> pairs;
+	std::vector<std::pair<int, int> > pairs;
 	int temp;
 	int value;
 
