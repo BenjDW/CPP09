@@ -6,7 +6,7 @@
 /*   By: bde-wits <bde-wits@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 10:36:19 by bde-wits          #+#    #+#             */
-/*   Updated: 2025/03/23 11:13:25 by bde-wits         ###   ########.fr       */
+/*   Updated: 2025/05/04 08:45:58 by bde-wits         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,10 @@
 
 int	main(int argc, char **argv)
 {
-	
-	if (argc != 3)// prend 2 base de données en entrées
-		std::cerr << "Error arg attend : base_csv base_de_donnée" << std::endl;
+	std::map<std::string, float>	imput;
+	BitcoinExchange					data();
+
+	if (argc != 2)// prend 1 base de données en entrées imput
+		return (std::cerr << "Error arg: 'base_de_donne.txt'" << std::endl, 1);
 	
 }
