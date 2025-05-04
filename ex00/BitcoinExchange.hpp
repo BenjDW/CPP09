@@ -6,7 +6,7 @@
 /*   By: bde-wits <bde-wits@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 10:36:13 by bde-wits          #+#    #+#             */
-/*   Updated: 2025/05/04 10:14:16 by bde-wits         ###   ########.fr       */
+/*   Updated: 2025/05/04 10:55:09 by bde-wits         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ class BitcoinExchange
 
 		int	init_csv();
 		int	verif_date();
+		int parse_input(const std::string &file);
 };
 
 int	BitcoinExchange::verif_date()
@@ -116,7 +117,7 @@ int	BitcoinExchange::init_csv()
 
 		date = line.substr(0, pos);
 		valuestr = line.substr(pos + 1);
-
+		this->date = date;
 		if (verif_date() == 1)
 			return (std::cerr << "date invalid : " << date << std::endl, 1);
 
@@ -131,6 +132,79 @@ int	BitcoinExchange::init_csv()
 	file.close();
 	return (0);
 }
+
+int BitcoinExchange::parse_input(const std::string &file)
+{
+	std::ifstream input(file.c_str());
+	std::string line;
+	size_t pos;
+	float value;
+	float result;
+	
+	if (!input.is_open())
+		return (std::cerr << "Error: file introuvable : " << file << std::endl, 1);
+
+	std::getline(input, line);
+	while (std::getline(input, line))
+	{
+		if (line.empty())
+			continue;
+
+		pos = line.find(" | ");
+		if (pos == std::string::npos)
+		{
+			std::cerr << "Error: bad input => " << line << std::endl;
+			continue;
+		}
+
+		std::string line_date = line.substr(0, pos);
+		std::string value_str = line.substr(pos + 3);
+		std::istringstream stream_value(value_str);
+
+		this->date = line_date;
+		if (this->verif_date() == 1)
+		{
+			std::cerr << "Error: bad date => " << line_date << std::endl;
+			continue;
+		}
+
+		if (!(stream_value >> value))
+		{
+			std::cerr << "Error: not a number => " << value_str << std::endl;
+			continue;
+		}
+
+		if (value < 0)
+		{
+			std::cerr << "Error: not a positive number => " << value_str << std::endl;
+			continue;
+		}
+		if (value > 1000)
+		{
+			std::cerr << "Error: too large a number => " << value_str << std::endl;
+			continue;
+		}
+
+		std::map<std::string, float>::const_iterator it = this->csv.lower_bound(line_date);
+		if (it == this->csv.end() || it->first != line_date)
+		{
+			if (it != this->csv.begin())
+				--it;
+			else
+			{
+				std::cerr << "Error: no data available for date => " << line_date << std::endl;
+				continue;
+			}
+		}
+
+		result = value * it->second;
+		std::cout << line_date << " => " << value << " = " << result << std::endl;
+	}
+
+	input.close();
+	return (0);
+}
+
 
 BitcoinExchange::BitcoinExchange()
 {
