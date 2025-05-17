@@ -6,7 +6,7 @@
 /*   By: bde-wits <bde-wits@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 10:36:17 by bde-wits          #+#    #+#             */
-/*   Updated: 2025/05/04 11:04:42 by bde-wits         ###   ########.fr       */
+/*   Updated: 2025/05/17 05:19:15 by bde-wits         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ int BitcoinExchange::parse_input(const std::string &file)
 		}
 
 		result = value * it->second;
-		std::cout << line_date << " => " << value << " = " << result << std::endl;
+		std::cout << it->first << " => " << value << " = " << result << std::endl;
 	}
 
 	input.close();
